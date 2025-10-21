@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../api";
+import api from "../api/api";
 import { toast } from "react-toastify";
 
 export default function Register() {
