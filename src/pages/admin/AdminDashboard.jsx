@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
-import api from "../../api";
+import api from "../../api/api.js";
 
 export default function AdminPage() {
   const [counts, setCounts] = useState({ users: 0, results: 0, payments: 0 });
