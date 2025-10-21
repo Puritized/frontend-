@@ -1,27 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import API from "../api/api";
 
 function PaymentPage() {
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
 
-  const handlePayment = async (e) => {
+  // Load Paystack Inline Script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+  const handlePayment = (e) => {
     e.preventDefault();
 
-    if (!amount || !email) return toast.error("Please enter all details");
-
-    try {
-      const { data } = await API.post("/payments/initialize", { email, amount });
-
-      if (data.status === true && data.data.authorization_url) {
-        window.location.href = data.data.authorization_url; // Redirect to Paystack payment page
-      } else {
-        toast.error("Failed to initialize payment");
-      }
-    } catch (error) {
-      toast.error("Payment error: " + error.message);
+    if (!email || !amount) {
+      return toast.error("Please enter both email and amount");
     }
+
+    const paystackPublicKey = "pk_test_xxxxxxxxxxxxxxxxxxxxxxx"; // 🔑 Replace with your Paystack public key
+    const handler = window.PaystackPop.setup({
+      key: paystackPublicKey,
+      email: email,
+      amount: Number(amount) * 100, // Convert to kobo
+      currency: "NGN",
+      ref: "PHIA-" + Date.now(), // Unique reference
+      metadata: {
+        custom_fields: [
+          {
+            display_name: "Student Email",
+            variable_name: "student_email",
+            value: email,
+          },
+        ],
+      },
+      callback: function (response) {
+        toast.success("Payment successful! Reference: " + response.reference);
+        window.location.href = `/verify-payment?reference=${response.reference}`;
+      },
+      onClose: function () {
+        toast.info("Transaction was cancelled.");
+      },
+    });
+
+    handler.openIframe();
   };
 
   return (
@@ -31,9 +55,10 @@ function PaymentPage() {
         <label>Email:</label>
         <input
           type="email"
-          placeholder="Enter your email"
+          placeholder="Enter student email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <label>Amount (₦):</label>
@@ -42,6 +67,7 @@ function PaymentPage() {
           placeholder="Enter amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          required
         />
 
         <button type="submit" className="pay-btn">
