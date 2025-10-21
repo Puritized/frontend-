@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Our School</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <header>
+    <h1>Welcome to Our School Website</h1>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/admissions">Admissions</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Empowering Students for a Brighter Future</h2>
+      <p>Providing quality education with excellence and integrity.</p>
+      <a href="/admissions" class="btn">Apply Now</a>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <h3>Experienced Teachers</h3>
+        <p>Our dedicated teachers inspire lifelong learning.</p>
+      </div>
+      <div class="feature">
+        <h3>Modern Facilities</h3>
+        <p>We provide a conducive environment for academic success.</p>
+      </div>
+      <div class="feature">
+        <h3>Quality Education</h3>
+        <p>We nurture every child to reach their full potential.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Our School. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
